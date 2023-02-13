@@ -6,24 +6,20 @@ import Todo from './pages/Todo'
 import NotFound from './pages/NotFound'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const divStyle = 'bg-primary-light h-screen flex flex-col items-center pb-[50px]';
 
   return (
     <>
-      <div>
-        <h1>Vite + React</h1>
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </button>
+      <div className={divStyle}>
+        <BrowserRouter basename='/React_TodoList_JWT'>
+        <Routes>
+          <Route path="/" element={<Todo />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<LogIn />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        </BrowserRouter>
       </div>
-      <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Todo />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<LogIn />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      </BrowserRouter>
     </>
   )
 }
