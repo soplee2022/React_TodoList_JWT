@@ -1,5 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
+import { Route, Routes, BrowserRouter, NavLink, Outlet } from 'react-router-dom'
 import Logo from '../assets/images/Logo.svg'
 import Banner from '../assets/images/Banner.png'
 import LogIn from './LogIn';
@@ -49,8 +50,7 @@ export default function SignUp() {
           <div className='w-full flex flex-col space-y-4 pt-4'>
             <input className='w-[140px] rounded-xl py-2 text-brown text-sm font-medium m-auto bg-primary tracking-widest hover:text-white'
               type="submit" value="註冊"/>
-            <input className='w-[140px] rounded-xl py-2 text-brown text-sm font-medium m-auto tracking-widest hover:text-white'
-              type="button" value="登入" onClick={() => window.location.href='./login'} />
+            <NavLink className='w-[140px] rounded-xl py-2 text-brown text-sm font-medium m-auto tracking-widest hover:text-white text-center' to="/login">登入</NavLink>
           </div>
         </form>
       </div>

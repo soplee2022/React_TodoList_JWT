@@ -1,24 +1,21 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
+import { Route, Routes, BrowserRouter, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { Empty } from 'antd';
+import { LogOutApi } from '../helpers/API'
+import swal from 'sweetalert';
+import { ulStyle, liStyle, listStyle, sectionStyle, notFinish, isFinish, style } from '../helpers/Style';
+
+
 import Logo from '../assets/images/Logo.svg'
 import Icon_add from '../assets/images/icon_add.svg'
 import Icon_delete from '../assets/images/icon_delete.svg';
-import { Empty } from 'antd';
 
 export default function Todo() {
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [todo, setTodo] = useState(data);
   const [value, setValue] = useState('');
-
-  const ulStyle = 'flex w-full flex-col justify-around space-y-6 mx-6';
-  const liStyle = 'flex items-center justify-between mt-6 mx-8';
-  const listStyle = 'container max-w-[500px] md:px-0';
-  const sectionStyle = 'w-full mx-auto flex flex-col items-center mt-4 bg-white rounded-[10px] box_shadow';
-
-  const notFinish = 'text-[14px] text-brown';
-  const isFinish = 'text-[14px] text-gray-300 line-through';const activeStyle = 'py-4 border-b-2 border-b-primary-light w-full text-center text-third text-sm font-bold text-brown active';
-  const style = 'py-4 border-b-2 border-b-primary-light w-full text-center text-third text-sm font-bold text-brown hover:border-b-primary';
-
   const [allStatus, setAllStatus] = useState([{
     state: '全部',
     className: 'active',
@@ -69,6 +66,24 @@ export default function Todo() {
     setData(deleteTodo);
   };
 
+  function LogOut (){
+    LogOutApi()
+    .then((res) =>{
+      console.log(res)
+      swal({
+        title: "請確認", 
+        text: "您是否要立即登出", 
+        icon:"warning",
+        buttons: true,
+        dangerMode: true
+        })
+        .then(() =>{
+          navigate('/login', {replace: true})
+        });
+    })
+    .catch(err => console.log(err))
+  }
+
   const total = data.filter((item) => !item.finish);
   const nickName = localStorage.getItem('nickName');
   return (
@@ -78,7 +93,7 @@ export default function Todo() {
       <img className="w-[300px]" src={Logo} alt="Logo" />
       <div className="flex items-center space-x-6">
         <p className="text-base text-brown font-bold ml-4"> {nickName}'s Todo List</p>
-        <input type="button" className="text-brown text-sm bg-primary py-1 px-5 font-medium rounded-lg tracking-widest hover:text-white" value="登出" />
+        <input type="button" className="text-brown text-sm bg-primary py-1 px-5  rounded-lg tracking-widest hover:text-white" value="登出" onClick={()=>{LogOut()}}/>
       </div>
     </nav>
     {/* Add Todo */}

@@ -1,43 +1,45 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
+import { Route, Routes, BrowserRouter, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { LogInApi } from '../helpers/API';
 import swal from 'sweetalert';
 import Logo from '../assets/images/Logo.svg'
 import Banner from '../assets/images/Banner.png'
-import { api, Test } from '../components/API';
-
 
 export default function LogIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const onSubmit = data => console.log(data);
-  // console.log(errors);
-
-  const url = 'https://todoo.5xcamp.us/users'
+  const onSubmit = data => {
+    const { email, password } = data
+    LogInBtn(email, password);
+    console.log(data)
+  }
+  const navigate = useNavigate();
 
   useEffect(() =>{
     
   },[])
 
 
-  const LogInApi = (email, password) =>{
-      axios
-      .post(`${url}/sign_in`,{
-        "user": {
-          "email": `${email}`,
-          "password": `${password}`
-        }
-      })
+  function LogInBtn (email, password){
+      LogInApi(email, password)
       .then((res)=>{
         console.log(res)
-        swal("登入成功！", "立刻進入 Todo List", "success");
+        swal({
+          title: "登入成功！", 
+          text: "立刻進入 Todo List", 
+          icon:"success",
+          })
+          .then(() =>{
+            navigate('/', {replace: true})
+          });
         const { headers: { authorization }, data: { nickname } } = res;
         localStorage.setItem('token', authorization); 
         localStorage.setItem('nickName', nickname)
-        window.location.href='./' // 跳轉 Todo -> 跳轉太快
+        
       })
       .catch((err)=>{
         console.log(err.message)
@@ -57,24 +59,26 @@ export default function LogIn() {
 
         <form className='flex flex-col space-y-4 w-[304px]' onSubmit={handleSubmit(onSubmit)}>
           <div className='w-full'>
-            <p className=' text-brown font-medium w-full'>Email</p>
+            <label className=' text-brown font-medium w-full' htmlFor="email">Email</label>
             <input className='py-3 pl-4 text-sm rounded-xl w-full'
-              type="text" placeholder="請輸入 Email" 
-              {...register("Email", {required: true, pattern: /^\S+@\S+$/i})} 
-              value={email} onChange={(e)=>{setEmail(e.target.value)}} />
+              type="text" placeholder="請輸入 Email" id='email'
+              {...register("email", 
+              {required: true, 
+                message: "此欄位不可留空"},
+              {pattern: /^\S+@\S+$/i,
+                message: "請輸入正確的信箱格式"},)}/>
           </div>
           <div className='w-full'>
-            <p className='text-brown font-medium w-full'>Password</p>
+            <label className='text-brown font-medium w-full' htmlFor="pwd">Password</label>
             <input className='py-3 pl-4 text-sm rounded-xl w-full'
-              type="password" placeholder="請輸入密碼" 
-              {...register("密碼", {required: true, maxLength: 20})}
+              type="password" placeholder="請輸入密碼" id='pwd' 
+              {...register("password", {required: true, maxLength: 20})}
               value={password} onChange={(e)=>{setPassword(e.target.value)}} />
           </div>
           <div className='w-full flex flex-col space-y-4 pt-4'>
             <input className='w-[140px] rounded-xl py-2 text-brown text-sm font-medium m-auto bg-primary tracking-widest hover:text-white'
-              type="submit" value="登入" onClick={()=>{LogInApi(email,password)}}/>
-            <input className='w-[140px] rounded-xl py-2 text-brown text-sm font-medium m-auto tracking-widest hover:text-white'
-              type="button" value="註冊" onClick={() => window.location.href='./signup'} />
+              type="submit" value="登入" />
+            <NavLink className='w-[140px] rounded-xl py-2 text-brown text-sm font-medium m-auto tracking-widest hover:text-white text-center' to="/signup">註冊</NavLink>
           </div>
         </form>
       </div>
