@@ -1,3 +1,4 @@
+export const divStyle = 'bg-primary-light h-screen flex flex-col items-center pb-[50px]';
 export const ulStyle = 'flex w-full flex-col justify-around space-y-6 mx-6';
 export const liStyle = 'container max-w-[500px] md:px-0';
 export const listStyle = 'container max-w-[500px] md:px-0';

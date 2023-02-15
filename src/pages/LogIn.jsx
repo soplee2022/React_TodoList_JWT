@@ -3,11 +3,13 @@ import { useForm } from 'react-hook-form';
 import { Route, Routes, BrowserRouter, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react';
 import { LogInApi } from '../helpers/API';
+import { useAuth } from '../helpers/Context';
 import swal from 'sweetalert';
 import Logo from '../assets/images/Logo.svg'
 import Banner from '../assets/images/Banner.png'
 
 export default function LogIn() {
+  const { setToken } = useAuth() 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -34,9 +36,10 @@ export default function LogIn() {
           icon:"success",
           })
           .then(() =>{
-            navigate('/', {replace: true})
+            navigate('/TodoPage', {replace: true})
           });
         const { headers: { authorization }, data: { nickname } } = res;
+        setToken(authorization); //登入拿token,App刷新,使接下來都可以使用token
         localStorage.setItem('token', authorization); 
         localStorage.setItem('nickName', nickname)
         
