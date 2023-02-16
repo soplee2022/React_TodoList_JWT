@@ -13,7 +13,7 @@ import Icon_add from '../assets/images/icon_add.svg'
 import Icon_delete from '../assets/images/icon_delete.svg';
 
 export default function Todo() {
-  const { setToken } = useAuth();
+  const { token, setToken } = useAuth();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [todo, setTodo] = useState(data);
@@ -80,12 +80,12 @@ export default function Todo() {
   }
 
   function LogOut (){
-    LogOutApi()
+    LogOutApi(token)
     .then((res) =>{
       console.log(res)
       setToken(null); //將App刷新,token設為無(同時local也設無),使下一位無法繼續使用同組token
       localStorage.removeItem('token'); //local記得一起設定為無,下一次重整才不會有token
-      navigate('/login', {replace: true})
+      navigate('/login')
     })
     .catch(err => console.log(err))
   }

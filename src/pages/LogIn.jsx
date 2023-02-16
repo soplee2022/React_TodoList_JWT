@@ -10,8 +10,6 @@ import Banner from '../assets/images/Banner.png'
 
 export default function LogIn() {
   const { setToken } = useAuth() 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
 
   const { register, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = data => {
@@ -20,11 +18,6 @@ export default function LogIn() {
     console.log(data)
   }
   const navigate = useNavigate();
-
-  useEffect(() =>{
-    
-  },[])
-
 
   function LogInBtn (email, password){
       LogInApi(email, password)
@@ -36,7 +29,7 @@ export default function LogIn() {
           icon:"success",
           })
           .then(() =>{
-            navigate('/TodoPage', {replace: true})
+            navigate('/TodoPage')
           });
         const { headers: { authorization }, data: { nickname } } = res;
         setToken(authorization); //登入拿token,App刷新,使接下來都可以使用token
@@ -66,17 +59,32 @@ export default function LogIn() {
             <input className='py-3 pl-4 text-sm rounded-xl w-full'
               type="text" placeholder="請輸入 Email" id='email'
               {...register("email", 
-              {required: true, 
-                message: "此欄位不可留空"},
-              {pattern: /^\S+@\S+$/i,
-                message: "請輸入正確的信箱格式"},)}/>
+              {
+                required: {
+                  value: true, 
+                  message: "此欄位不可空白"},
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: "信箱格式有誤"}
+              })}/>
+            <p className=' text-red-600 font-normal text-sm mt-1 w-full'>{errors.email?.message}</p>
           </div>
           <div className='w-full'>
             <label className='text-brown font-medium w-full' htmlFor="pwd">Password</label>
             <input className='py-3 pl-4 text-sm rounded-xl w-full'
               type="password" placeholder="請輸入密碼" id='pwd' 
-              {...register("password", {required: true, maxLength: 20})}
-              value={password} onChange={(e)=>{setPassword(e.target.value)}} />
+              {...register("password", 
+              {
+                required: {
+                  value:true,
+                  message: "此欄位不可空白"}, 
+                minLength: {
+                  value: 6,
+                  message: "密碼長度至少 6 字元"
+                }
+              }
+              )}/>
+            <p className=' text-red-600 font-normal text-sm mt-1 w-full'>{errors.password?.message}</p>
           </div>
           <div className='w-full flex flex-col space-y-4 pt-4'>
             <input className='w-[140px] rounded-xl py-2 text-brown text-sm font-medium m-auto bg-primary tracking-widest hover:text-white'

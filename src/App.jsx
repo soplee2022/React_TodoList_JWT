@@ -9,7 +9,7 @@ import { AuthContext } from './helpers/Context'
 import { divStyle } from './helpers/Style'
 
 function App() {
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   return (
     <>
