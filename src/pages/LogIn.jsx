@@ -1,7 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
-import { Route, Routes, BrowserRouter, NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom'
 import { LogInApi } from '../helpers/API';
 import { useAuth } from '../helpers/Context';
 import swal from 'sweetalert';
@@ -10,6 +9,7 @@ import Banner from '../assets/images/Banner.png'
 
 export default function LogIn() {
   const { setToken } = useAuth() 
+  const navigate = useNavigate();
 
   const { register, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = data => {
@@ -17,7 +17,6 @@ export default function LogIn() {
     LogInBtn(email, password);
     console.log(data)
   }
-  const navigate = useNavigate();
 
   function LogInBtn (email, password){
       LogInApi(email, password)
@@ -39,7 +38,7 @@ export default function LogIn() {
       })
       .catch((err)=>{
         console.log(err.message)
-        swal("登入失敗", "請確認是否正確輸入", "error");
+        swal("登入失敗", `${err.response.data.message}`, "error");
         return
       })
     }

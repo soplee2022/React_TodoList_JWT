@@ -1,6 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
 import { Route, Routes, BrowserRouter, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { SignUpApi } from '../helpers/API';
 import Logo from '../assets/images/Logo.svg'
 import Banner from '../assets/images/Banner.png'
 import { message } from 'antd';
@@ -9,10 +10,32 @@ export default function SignUp() {
   
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const onSubmit = data => {
-    const { email, password } = data
+    const { nickname, email, password, CheckPassword } = data
+    SignUpBtn(nickname, email, password);
     console.log(data)
   }
+
   const navigate = useNavigate();
+
+  function SignUpBtn (nickname, email, password){
+    SignUpApi(nickname, email, password)
+    .then((res)=>{
+      console.log(res)
+      swal({
+        title: "註冊成功！", 
+        text: "為您跳轉至登入頁面", 
+        icon:"success",
+        })
+        .then(() =>{
+          navigate('/login')
+        });
+    })
+    .catch((err)=>{
+      console.log("err",err)
+      swal("註冊失敗", `${(err.response.data.error).toString()}`, "error");
+      return
+    })
+  }
 
   return (
     <div className='container h-screen flex justify-center items-center space-x-[103px]'>
@@ -25,10 +48,10 @@ export default function SignUp() {
 
         <form className='flex flex-col space-y-4 w-[304px]' onSubmit={handleSubmit(onSubmit)}>
           <div className='w-full'>
-          <label className=' text-brown font-medium w-full' htmlFor="email">Name</label>
+          <label className=' text-brown font-medium w-full' htmlFor="nickname">Name</label>
             <input className='py-3 pl-4 text-sm rounded-xl w-full' 
-              type="text" placeholder="請輸入您的暱稱"
-              {...register("name", {
+              type="text" placeholder="請輸入您的暱稱" id='nickname'
+              {...register("nickname", {
                 required: {
                   value: true,
                   message: "此欄位不可空白"
@@ -43,7 +66,7 @@ export default function SignUp() {
                 }
                 }
                 )} />
-            <p className=' text-red-600 font-normal text-sm mt-1 w-full'>{errors.name?.message}</p>
+            <p className=' text-red-600 font-normal text-sm mt-1 w-full'>{errors.nickname?.message}</p>
           </div>
           <div className='w-full'>
             <label className=' text-brown font-medium w-full' htmlFor="email">Email</label>

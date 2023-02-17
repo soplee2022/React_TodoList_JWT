@@ -7,4 +7,6 @@ export const notFinish = 'text-[14px] text-brown';
 export const isFinish = 'text-[14px] text-gray-300 line-through';const activeStyle = 'py-4 border-b-2 border-b-primary-light w-full text-center text-third text-sm font-bold text-brown active';
 export const style = 'py-4 border-b-2 border-b-primary-light w-full text-center text-third text-sm font-bold text-brown hover:border-b-primary';
 
+export const header = "flex flex-col  items-center mt-4 space-y-4 container md:flex-row md:items-center md:justify-between md:container pt-6";
+
 
